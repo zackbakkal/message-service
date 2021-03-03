@@ -16,6 +16,16 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @GetMapping("/alive")
+    public String alive() {
+        return "MESSAGE-SERVICE: (ok)";
+    }
+
+    @GetMapping
+    public String falbackUri() {
+        return "Message service is unavailable, please try again later";
+    }
+
     @PostMapping("/send")
     public MessageResponseTemplate sendMessage(@RequestBody MessageRequestTemplate messageRequestTemplate) throws UserNameNotFoundException {
         return messageService.sendMessage(messageRequestTemplate);
@@ -24,6 +34,15 @@ public class MessageController {
     @GetMapping("/load/{userA}/{userB}")
     public List<MessageResponseTemplate> loadMessages(@PathVariable String userA, @PathVariable String userB) throws UserNameNotFoundException {
         return messageService.loadMessages(userA, userB);
+    }
+
+    @GetMapping("/load/{userA}/{userB}/{from}/{to}")
+    public List<MessageResponseTemplate> loadMessagesFromTo(
+            @PathVariable String userA,
+            @PathVariable String userB,
+            @PathVariable int from,
+            @PathVariable int to) throws UserNameNotFoundException {
+        return messageService.loadMessagesFromTo(userA, userB, from, to);
     }
 
 }
